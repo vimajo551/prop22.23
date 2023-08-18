@@ -3,8 +3,6 @@ const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
-  
-
 var engine, world;
 var canvas;
 var palyer, playerBase, playerArcher;
@@ -50,6 +48,31 @@ function draw() {
   for (var i = 0; i < playerArrows.length; i++) {
     if (playerArrows[i] !== undefined) {
       playerArrows[i].display();
+
+      var board1Collision = Matter.SAT.collides(
+        board1.body,
+        playerArrows[i].body
+      );
+
+      var board2Collision = Matter.SAT.collides(
+        board2.body,
+        playerArrows[i].body
+      );
+
+      if (board1Collision.collided || board2Collision.collided) {
+        console.log("Collided");
+      }
+
+      var posX = playerArrows[i].body.position.x;
+      var posY = playerArrows[i].body.position.y;
+
+      if (posX > width || posY > height) {
+        if (!playerArrows[i].isRemoved) {
+          playerArrows[i].remove(i);
+        } else {
+          playerArrows[i].trajectory = [];
+        }
+      }
     }
   }
 
@@ -75,6 +98,8 @@ function keyPressed() {
 
       var arrow = new PlayerArrow(posX, posY, 100, 10, angle);
 
+      arrow.trajectory = [];
+      
       Matter.Body.setAngle(arrow.body, angle);
       playerArrows.push(arrow);
       numberOfArrows -= 1;
