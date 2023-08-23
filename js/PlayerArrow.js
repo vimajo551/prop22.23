@@ -60,6 +60,5 @@ class PlayerArrow {
       fill("white");
       ellipse(this.trajectory[i][0], this.trajectory[i][1], 5, 5);
     }
-    
   }
 }

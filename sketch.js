@@ -10,6 +10,8 @@ var playerArrows = [];
 var board1, board2;
 var numberOfArrows = 10;
 
+var score = 0;
+
 function preload() {
   backgroundImg = loadImage("./assets/background.png");
 }
@@ -60,7 +62,7 @@ function draw() {
       );
 
       if (board1Collision.collided || board2Collision.collided) {
-        console.log("Collided");
+        score += 5;
       }
 
       var posX = playerArrows[i].body.position.x;
@@ -87,6 +89,17 @@ function draw() {
   textAlign("center");
   textSize(30);
   text("Flechas Restantes: " + numberOfArrows, 200, 100);
+  
+  // Pontuação
+  fill("#FFFF");
+  textAlign("center");
+  textSize(30);
+  text("Pontuação: " + score, width - 200, 100);
+
+  if (numberOfArrows == 0) {
+    gameOver();
+  }
+
 }
 
 function keyPressed() {
@@ -99,7 +112,6 @@ function keyPressed() {
       var arrow = new PlayerArrow(posX, posY, 100, 10, angle);
 
       arrow.trajectory = [];
-      
       Matter.Body.setAngle(arrow.body, angle);
       playerArrows.push(arrow);
       numberOfArrows -= 1;
@@ -115,3 +127,23 @@ function keyReleased() {
     }
   }
 }
+
+function gameOver() {
+  swal(
+    {
+      title: `Fim de Jogo!!!`,
+      text: "Obrigado por jogar!!",
+      imageUrl:
+        "https://raw.githubusercontent.com/vishalgaddam873/PiratesInvision/main/assets/board.png",
+      imageSize: "150x150",
+      confirmButtonText: "Jogar Novamente"
+    },
+    function(isConfirm) {
+      if (isConfirm) {
+        location.reload();
+      }
+    }
+  );
+}
+
+
